@@ -93,12 +93,11 @@ extension MapViewController: MKMapViewDelegate {
         self.selectedAnnotation = view.annotation as? Place
         detailTitle.text = selectedAnnotation?.name
         detailDescription.text = selectedAnnotation?.longDescription
+        starButton.isSelected = false
         if let name = selectedAnnotation?.name {
             let favorites = DataManager.sharedInstance.listFavorites()
             if favorites.contains(name) {
                 starButton.isSelected = true
-            } else {
-                starButton.isSelected = false
             }
         }
     }
