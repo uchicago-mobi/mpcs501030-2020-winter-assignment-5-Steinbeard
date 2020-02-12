@@ -19,28 +19,28 @@ class MapViewController: UIViewController {
     @IBOutlet var detailDescription: UILabel!
     let locationManager = CLLocationManager()
     let id = MKMapViewDefaultAnnotationViewReuseIdentifier
+    let places = DataManager.sharedInstance.loadAnnotationFromPlist()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //View properties
         mapView.showsCompass = false
         mapView.pointOfInterestFilter = .excludingAll
         let span = MKCoordinateSpan(latitudeDelta: 0.15, longitudeDelta: 0.15)
         let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 41.790426, longitude: -87.599199), span: span)
         mapView.region = region
         mapView.delegate = self
+        mapView.register(PlaceMarkerView.self, forAnnotationViewWithReuseIdentifier: id)
         detailBox.backgroundColor = UIColor.darkGray.withAlphaComponent(0.7)
-        
         starButton.isSelected = false
         starButton.setImage(UIImage(systemName: "star.fill"), for: .selected)
-        
+        //Layout contraints
         mapView.translatesAutoresizingMaskIntoConstraints = false
         favoritesButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate(constraints())
-        
-        mapView.register(PlaceMarkerView.self, forAnnotationViewWithReuseIdentifier: id)
+
         
         DataManager.sharedInstance.saveFavorites(favorites: ["Wrigley Field", "Monkey Jungle", "Big Boy Creek"])
-        print(DataManager.sharedInstance.loadAnnotationFromPlist())
     }
     
     func constraints() -> [NSLayoutConstraint] {

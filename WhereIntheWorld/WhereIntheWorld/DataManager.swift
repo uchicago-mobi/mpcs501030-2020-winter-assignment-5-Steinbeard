@@ -15,30 +15,23 @@ public class DataManager {
     fileprivate init() {
         if defaults.object(forKey: "favorites") == nil {
             //No existing favorites
-            print("First time using this dang app!")
             defaults.set([String](), forKey: "favorites")
         }
     }
-    // retrieve annotations and store favorites in user defaults
-    func loadAnnotationFromPlist() -> [PlaceData]? {
-        var places: DataPlaces? = DataPlaces()
+
+    func loadAnnotationFromPlist() -> [PlaceData] {
+        var places = [PlaceData]()
         if let url = Bundle.main.url(forResource: "Data", withExtension: "plist") {
             do {
                 let data = try Data(contentsOf: url)
                 let decoder = PropertyListDecoder()
-                var root = try decoder.decode(RootDictionary.self, from: data)
+                let root = try decoder.decode(RootDictionary.self, from: data)
                 places = root.places
             } catch {
                 print(error)
             }
         }
         return places
-//        var places: [PlaceData]?
-//        if let data = try? Data(contentsOf: dataURL) {
-//            let decoder = PropertyListDecoder()
-//            for place
-//            places = try? decoder.decode(PlaceData.self, from: data)
-//        }
     }
     
     func saveFavorites(favorites: [String]) {
@@ -50,11 +43,9 @@ public class DataManager {
 }
 
 private struct RootDictionary: Codable {
-    var places: DataPlaces
+    var places: [PlaceData]
     var region: [Double]
 }
-
-private typealias DataPlaces = [PlaceData]
 
 struct PlaceData: Codable {
     var name: String
