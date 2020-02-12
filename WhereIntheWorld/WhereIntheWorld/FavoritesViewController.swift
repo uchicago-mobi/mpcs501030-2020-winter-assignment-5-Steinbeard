@@ -10,11 +10,13 @@ import UIKit
 
 class FavoritesViewController: UIViewController {
     @IBOutlet var tableView: UITableView!
+    @IBAction func dismiss(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Table view of favorite places that can be selected, and a dismiss button
-        // Add a tableview?
+        //Constraints weird
     }
+    
 }
