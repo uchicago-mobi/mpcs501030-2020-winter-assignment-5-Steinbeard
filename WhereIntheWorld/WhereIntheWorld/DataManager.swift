@@ -8,6 +8,18 @@
 
 import Foundation
 
+private struct RootDictionary: Codable {
+    var places: [PlaceData]
+    var region: [Double]
+}
+
+struct PlaceData: Codable {
+    var name: String
+    var description: String
+    var lat: Double
+    var long: Double
+}
+
 public class DataManager {
     public static let sharedInstance = DataManager()
     let defaults = UserDefaults.standard
@@ -54,31 +66,3 @@ public class DataManager {
         return favorites
     }
 }
-
-private struct RootDictionary: Codable {
-    var places: [PlaceData]
-    var region: [Double]
-}
-
-struct PlaceData: Codable {
-    var name: String
-    var description: String
-    var lat: Double
-    var long: Double
-}
-
-//NSCodable Place object for storing in User Defaults
-//class NSPlace : NSObject, NSCoding {
-//    var name: String
-//    var description: String
-//    var lat: Float
-//    var long: Float
-//
-//    required init?(coder: NSCoder) {
-//        <#code#>
-//    }
-//
-//    func encode(with coder: NSCoder) {
-//        <#code#>
-//    }
-//}

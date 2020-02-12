@@ -9,8 +9,7 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController {
-
+class MapViewController: UIViewController, PlacesFavoritesDelegate {
     @IBOutlet var mapView: MKMapView!
     @IBOutlet var starButton: UIButton!
     @IBOutlet var favoritesButton: UIButton!
@@ -59,6 +58,12 @@ class MapViewController: UIViewController {
         ]
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let favoritesVC = segue.destination as? FavoritesViewController {
+            favoritesVC.delegate = self
+        }
+    }
+    
     @IBAction func toggleFavorite(_ sender: Any) {
         let dataManager = DataManager.sharedInstance
         if let name = selectedAnnotation?.name {
@@ -73,6 +78,15 @@ class MapViewController: UIViewController {
         }
     }
     
+    func goToFavoritePlace(name: String) {
+        let places = mapView.annotations.filter({$0 is Place}) as? [Place]
+        if let place = places?.first(where: {$0.name == name}) {
+            let newSpan = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+            let newRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude), span: newSpan)
+            mapView.region = newRegion
+            mapView.selectAnnotation(place, animated: true)
+        }
+    }
 }
 
 extension MapViewController: MKMapViewDelegate {
@@ -82,7 +96,6 @@ extension MapViewController: MKMapViewDelegate {
         var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: id)
         if annotationView == nil {
             annotationView = PlaceMarkerView(annotation: annotation, reuseIdentifier: id)
-            //annotationView!.canShowCallout = true
         } else {
             annotationView!.annotation = annotation
         }
@@ -102,24 +115,3 @@ extension MapViewController: MKMapViewDelegate {
         }
     }
 }
-
-
-
-
-//        if annotation is MKUserLocation { return nil }
-//        guard let annotationView = mapView.dequeueReusableAnnotationView(
-//            withIdentifier: id, for: annotation) as? MKMarkerAnnotationView else {
-//            return nil
-//        }
-//        annotationView.animatesWhenAdded = true
-//        annotationView.canShowCallout = true
-//        return annotationView
-
-    
-//    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-//        guard view.isKind(of: PlaceMarkerView.self) else {
-//            return
-//        }
-//        detailTitle.text = view.annotation.name
-//
-//    }
