@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 class PlaceMarkerView: MKMarkerAnnotationView {
-    var place = Place()
+    var place: Place?
     override var annotation: MKAnnotation? {
         willSet {
               clusteringIdentifier = "Place"
@@ -19,29 +19,15 @@ class PlaceMarkerView: MKMarkerAnnotationView {
               glyphImage = UIImage(systemName: "pin.fill")
         }
     }
-
 }
 
 class Place: MKPointAnnotation {
     var name: String?
     var longDescription: String?
+    init(_ data: PlaceData) {
+        super.init()
+        self.name = data.name
+        self.longDescription = data.description
+        self.coordinate = CLLocationCoordinate2D(latitude: data.lat, longitude: data.long)
+    }
 }
-
-
-
-
-/*
- let settingsURL: URL = ... // location of plist file
- var settings: MySettings?
-
- if let data = try? Data(contentsOf: settingsURL) {
-   let decoder = PropertyListDecoder()
-   settings = try? decoder.decode(MySettings.self, from: data)
- }let settingsURL: URL = ... // location of plist file
- var settings: MySettings?
-
- if let data = try? Data(contentsOf: settingsURL) {
-   let decoder = PropertyListDecoder()
-   settings = try? decoder.decode(MySettings.self, from: data)
- }
- */

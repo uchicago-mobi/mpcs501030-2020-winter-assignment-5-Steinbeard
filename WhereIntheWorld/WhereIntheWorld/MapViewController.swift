@@ -20,14 +20,15 @@ class MapViewController: UIViewController {
     let locationManager = CLLocationManager()
     let id = MKMapViewDefaultAnnotationViewReuseIdentifier
     let places = DataManager.sharedInstance.loadAnnotationFromPlist()
+    var selectedAnnotation: Place?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //View properties
+        //Set view properties
         mapView.showsCompass = false
         mapView.pointOfInterestFilter = .excludingAll
         let span = MKCoordinateSpan(latitudeDelta: 0.15, longitudeDelta: 0.15)
-        let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 41.790426, longitude: -87.599199), span: span)
+        let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 41.870522, longitude: -87.65), span: span)
         mapView.region = region
         mapView.delegate = self
         mapView.register(PlaceMarkerView.self, forAnnotationViewWithReuseIdentifier: id)
@@ -41,6 +42,11 @@ class MapViewController: UIViewController {
 
         
         DataManager.sharedInstance.saveFavorites(favorites: ["Wrigley Field", "Monkey Jungle", "Big Boy Creek"])
+        // Add annotations
+        for placeData in places {
+            let annotation = Place(placeData)
+            mapView.addAnnotation(annotation)
+        }
     }
     
     func constraints() -> [NSLayoutConstraint] {
@@ -61,21 +67,41 @@ class MapViewController: UIViewController {
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView,
                  viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        if annotation is MKUserLocation { return nil }
-        guard let annotationView = mapView.dequeueReusableAnnotationView(
-            withIdentifier: id, for: annotation) as? MKMarkerAnnotationView else {
-            return nil
+        guard annotation is Place else { return nil }
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: id)
+        if annotationView == nil {
+            annotationView = PlaceMarkerView(annotation: annotation, reuseIdentifier: id)
+            //annotationView!.canShowCallout = true
+        } else {
+            annotationView!.annotation = annotation
         }
-        annotationView.animatesWhenAdded = true
-        annotationView.canShowCallout = true
         return annotationView
     }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        self.selectedAnnotation = view.annotation as? Place
+        detailTitle.text = selectedAnnotation?.name
+        detailDescription.text = selectedAnnotation?.longDescription
+    }
+}
+
+
+
+
+//        if annotation is MKUserLocation { return nil }
+//        guard let annotationView = mapView.dequeueReusableAnnotationView(
+//            withIdentifier: id, for: annotation) as? MKMarkerAnnotationView else {
+//            return nil
+//        }
+//        annotationView.animatesWhenAdded = true
+//        annotationView.canShowCallout = true
+//        return annotationView
+
     
 //    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
 //        guard view.isKind(of: PlaceMarkerView.self) else {
 //            return
 //        }
 //        detailTitle.text = view.annotation.name
-//        
+//
 //    }
-}
