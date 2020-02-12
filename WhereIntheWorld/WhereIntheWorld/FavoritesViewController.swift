@@ -17,7 +17,6 @@ class FavoritesViewController: UIViewController, UITableViewDataSource, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         favorites = DataManager.sharedInstance.listFavorites()
-        print(favorites)
         tableView.delegate = self
         tableView.dataSource = self
     }

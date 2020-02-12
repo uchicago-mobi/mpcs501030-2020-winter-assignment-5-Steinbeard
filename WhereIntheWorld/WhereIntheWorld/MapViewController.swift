@@ -21,6 +21,19 @@ class MapViewController: UIViewController, PlacesFavoritesDelegate {
     let places = DataManager.sharedInstance.loadAnnotationFromPlist()
     var selectedAnnotation: Place?
     
+    func constraints() -> [NSLayoutConstraint] {
+        return [
+            mapView.topAnchor.constraint(equalTo: view.topAnchor),
+            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            favoritesButton.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            favoritesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            favoritesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            favoritesButton.heightAnchor.constraint(equalToConstant: 80)
+        ]
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //Set view properties
@@ -45,19 +58,7 @@ class MapViewController: UIViewController, PlacesFavoritesDelegate {
         }
     }
     
-    func constraints() -> [NSLayoutConstraint] {
-        return [
-            mapView.topAnchor.constraint(equalTo: view.topAnchor),
-            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            favoritesButton.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            favoritesButton.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            favoritesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            favoritesButton.heightAnchor.constraint(equalToConstant: 80)
-        ]
-    }
-    
+    // Wire favorites menu as delegator
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let favoritesVC = segue.destination as? FavoritesViewController {
             favoritesVC.delegate = self
