@@ -44,7 +44,7 @@ class MapViewController: UIViewController, PlacesFavoritesDelegate {
         mapView.region = region
         mapView.delegate = self
         mapView.register(PlaceMarkerView.self, forAnnotationViewWithReuseIdentifier: id)
-        detailBox.backgroundColor = UIColor.darkGray.withAlphaComponent(0.7)
+        detailBox.backgroundColor = UIColor.darkGray.withAlphaComponent(0.9)
         starButton.isSelected = false
         starButton.setImage(UIImage(systemName: "star.fill"), for: .selected)
         //Layout contraints
