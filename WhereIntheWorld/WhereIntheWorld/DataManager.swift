@@ -34,12 +34,25 @@ public class DataManager {
         return places
     }
     
-    func saveFavorites(favorites: [String]) {
-        defaults.set(favorites, forKey: "favorites")
+    func saveFavorites(names: [String]) {
+        defaults.set(names, forKey: "favorites")
     }
     
-    func deleteFavorite() {}
-    func listFavorites() {}
+    func addFavorite(placeName: String) {
+        var favorites = listFavorites()
+        favorites.append(placeName)
+        saveFavorites(names: favorites)
+    }
+    
+    func deleteFavorite(placeName: String) {
+        let oldFavorites = listFavorites()
+        let newFavorites = oldFavorites.filter(){$0 != placeName}
+        saveFavorites(names: newFavorites)
+    }
+    func listFavorites() -> [String] {
+        let favorites = defaults.object(forKey: "favorites") as? [String] ?? [String]()
+        return favorites
+    }
 }
 
 private struct RootDictionary: Codable {

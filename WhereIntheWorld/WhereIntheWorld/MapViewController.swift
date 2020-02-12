@@ -39,9 +39,6 @@ class MapViewController: UIViewController {
         mapView.translatesAutoresizingMaskIntoConstraints = false
         favoritesButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate(constraints())
-
-        
-        DataManager.sharedInstance.saveFavorites(favorites: ["Wrigley Field", "Monkey Jungle", "Big Boy Creek"])
         // Add annotations
         for placeData in places {
             let annotation = Place(placeData)
@@ -60,6 +57,20 @@ class MapViewController: UIViewController {
             favoritesButton.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             favoritesButton.heightAnchor.constraint(equalToConstant: 80)
         ]
+    }
+    
+    @IBAction func toggleFavorite(_ sender: Any) {
+        let dataManager = DataManager.sharedInstance
+        if let name = selectedAnnotation?.name {
+            let currentFavorites = dataManager.listFavorites()
+            if currentFavorites.contains(name) {
+                dataManager.deleteFavorite(placeName: name)
+                starButton.isSelected = false
+            } else {
+                dataManager.addFavorite(placeName: name)
+                starButton.isSelected = true
+            }
+        }
     }
     
 }
@@ -82,6 +93,14 @@ extension MapViewController: MKMapViewDelegate {
         self.selectedAnnotation = view.annotation as? Place
         detailTitle.text = selectedAnnotation?.name
         detailDescription.text = selectedAnnotation?.longDescription
+        if let name = selectedAnnotation?.name {
+            let favorites = DataManager.sharedInstance.listFavorites()
+            if favorites.contains(name) {
+                starButton.isSelected = true
+            } else {
+                starButton.isSelected = false
+            }
+        }
     }
 }
 

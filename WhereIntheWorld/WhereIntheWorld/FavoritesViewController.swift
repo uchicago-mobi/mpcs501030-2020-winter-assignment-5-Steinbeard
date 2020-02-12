@@ -13,10 +13,12 @@ class FavoritesViewController: UIViewController {
     @IBAction func dismiss(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
+    var favorites: [String]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //Constraints weird
+        favorites = DataManager.sharedInstance.listFavorites()
+        print(favorites)
     }
     
 }

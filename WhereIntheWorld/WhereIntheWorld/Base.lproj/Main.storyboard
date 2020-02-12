@@ -57,6 +57,9 @@
                                         <state key="normal" image="star" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="22"/>
                                         </state>
+                                        <connections>
+                                            <action selector="toggleFavorite:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sEf-aG-Wve"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
